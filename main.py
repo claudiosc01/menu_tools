@@ -75,7 +75,8 @@ def values_texts_options():
     config_values8 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 8. Gif-Imagen para WhatsApp v1. ")
     config_values9 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 9. Generar Views para Youtube.                           [In Process]")
     config_values10 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 10. Enviar multimensajes a tus Contactos - WhatsApp v1.  [Inactive]")
-    print('\n\n'+config_values1+'\n'+config_values2+'\n'+config_values3+'\n'+config_values4+'\n'+config_values5+'\n'+config_values6+'\n'+config_values7+'\n'+config_values8+'\n'+config_values9+'\n'+config_values10)
+    config_values11 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 11. Gif-Imagen para Discord v1.  [Slower]")
+    print('\n\n'+config_values1+'\n'+config_values2+'\n'+config_values3+'\n'+config_values4+'\n'+config_values5+'\n'+config_values6+'\n'+config_values7+'\n'+config_values8+'\n'+config_values9+'\n'+config_values10+'\n'+config_values11)
 
 #---------------------------------------------------FUNCTIONS--------------------------------------------------------
 
@@ -353,10 +354,7 @@ def whatsapp_gifter_change_photo():
 
     driver.find_element(By.CSS_SELECTOR, 'div.g0rxnol2').click() 
     time.sleep(2)
-    # driver.find_element(By.CSS_SELECTOR, 'img._11JPr').click()
-    # time.sleep(2)
-    # btnClicked = driver.find_elements(By.CSS_SELECTOR, 'div.iWqod')
-    # btnClicked[2].click()
+
     message_wsp_closed = Colorate.Horizontal(Colors.yellow_to_red, f"  > If u need exit to program. Prees Ctrl + C")
     print(message_wsp_closed)
     try:
@@ -384,7 +382,107 @@ def whatsapp_gifter_change_photo():
         exit
 
 #-----------------------------------------------------------------------------------------------------
-        
+
+def discord_gifter_change_photo():
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get('https://discord.com/channels/@me')
+
+    enter_to_run_getter = Colorate.Horizontal(Colors.yellow_to_red, f"\n\n  > Press enter if you logged in correctly Discord-Web...")
+    input(enter_to_run_getter)
+    driver.get('https://discord.com/channels/@me')
+    
+
+    time.sleep(4)
+    elements = driver.find_elements(By.CLASS_NAME, 'contents_fb6220') #Pagina Principal, boton de opcions - 1
+
+    if len(elements) > 2:
+        elements[2].click()
+        time.sleep(2)
+    
+    driver.find_element(By.CLASS_NAME, 'button_afdfd9.lookFilled__19298.colorBrand_b2253e.sizeSmall__71a98.grow__4c8a4').click()
+    time.sleep(3)
+
+    try:
+        while True:
+            for x in range(3):
+                if x % 2 == 0:
+                    driver.find_element(By.CLASS_NAME, 'wrapper_edb6e0.avatarUploaderInner_c81617').click()
+
+                    #cambiar avatar
+                    wait = WebDriverWait(driver, 2)  
+                    elements2 = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'label__73cb9')))
+                    if elements2:
+                        elements2[0].click()
+
+                    # file-input
+                    wait = WebDriverWait(driver, 10)  # Espera hasta 10 segundos
+                    upload = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-mount"]/div[2]/div[1]/div[4]/div[2]/div/div/div[2]/div[1]/div[1]/input')))
+                    upload.send_keys('C:/Users/parak/Pictures/arcoris-perfil.png')
+                    
+                    time.sleep(3)
+                    # Accept Photo Perfil
+                    wait = WebDriverWait(driver, 5)  # Esperar hasta 10 segundos
+                    elements3 = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.button_afdfd9.lookFilled__19298.colorBrand_b2253e.sizeSmall__71a98.grow__4c8a4')))
+
+                    if len(elements3) > 7:  # Asegurarse de que hay al menos 8 elementos
+                        elements3[7].click()
+                    time.sleep(2)
+                    wait = WebDriverWait(driver, 2)
+                    elements4 = wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.button_afdfd9.lookFilled__19298.colorGreen__5f181.sizeSmall__71a98.grow__4c8a4')))
+                    if elements4: 
+                        elements4[0].click()  
+                    
+                    time.sleep(30)
+
+                else:
+                    driver.find_element(By.CLASS_NAME, 'wrapper_edb6e0.avatarUploaderInner_c81617').click()
+
+                    #cambiar avatar
+                    wait = WebDriverWait(driver, 2)
+                    elements2 = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'label__73cb9')))
+                    if elements2:
+                        elements2[0].click()
+
+                    # file-input
+                    wait = WebDriverWait(driver, 5) 
+                    upload = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-mount"]/div[2]/div[1]/div[4]/div[2]/div/div/div[2]/div[1]/div[1]/input')))
+                    upload.send_keys('C:/Users/parak/Pictures/lel.png')
+                    
+                    time.sleep(3)
+                    # Accept Photo Perfil
+                    wait = WebDriverWait(driver, 5)  # Esperar hasta 10 segundos
+                    elements3 = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.button_afdfd9.lookFilled__19298.colorBrand_b2253e.sizeSmall__71a98.grow__4c8a4')))
+
+                    if len(elements3) > 7:  # Asegurarse de que hay al menos 8 elementos
+                        elements3[7].click()  
+
+                    time.sleep(2)
+                    wait = WebDriverWait(driver, 2)
+                    elements4 = wait.until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, '.button_afdfd9.lookFilled__19298.colorGreen__5f181.sizeSmall__71a98.grow__4c8a4')))
+                    if elements4:  
+                        elements4[0].click()  
+
+
+                    time.sleep(30)
+                    
+            time.sleep(5)
+            driver.get('https://discord.com/channels/@me')
+            elements = driver.find_elements(By.CLASS_NAME, 'contents_fb6220') #Pagina Principal, boton de opcions - 1
+
+            if len(elements) > 2:
+                elements[2].click()
+                time.sleep(2)
+            
+            driver.find_element(By.CLASS_NAME, 'button_afdfd9.lookFilled__19298.colorBrand_b2253e.sizeSmall__71a98.grow__4c8a4').click()
+            time.sleep(60)
+
+    except:
+        print("An exception occurred")
+        close_func_discord = Colorate.Horizontal(Colors.yellow_to_red, f"\n\n > Press enter to closed...")
+        input(close_func_discord)
+        exit
+
+#-----------------------------------------------------------------------------------------------------
 def generate_views_for_youtube(views_number, link_video, seconds):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--mute-audio")
@@ -497,14 +595,13 @@ def responses_functions():
     elif config_data == 10:
         search_contact_number_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa el numero del contacto de WhatsApp: > ")
         search_contact_number = str(input(paste_link_for_generate_prompt))
-
         generate_automessages_whatsapp()
-
+    elif config_data == 11:
+        discord_gifter_change_photo()
     else:
         invalid_option_text = Colorate.Horizontal(Colors.cyan_to_green, "              [!] Por favor elija una opcion valida.")
         print(invalid_option_text)
         time.sleep(2)
-
 
     time.sleep(.5)
     Banner_end()
