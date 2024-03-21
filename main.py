@@ -244,7 +244,7 @@ def generate_random_pdf(directorio):
         # Generar 50 líneas de texto aleatorio
         for j in range(100):
             texto_random = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
-            pdf.cell(200, 10, txt=texto_random, ln=j + 1, align='C')
+            pdf.cell(200, 10, txt=texto_random, ln=1, align='C')
 
         archivo_pdf = os.path.join(directorio, f"documento0{i + 1}.pdf")
         pdf.output(archivo_pdf)
