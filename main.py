@@ -5,6 +5,8 @@ import time
 import random
 import string
 from fpdf import FPDF
+from pypresence import Presence
+import random
 from pptx import Presentation
 from console_progressbar import ProgressBar
 from bs4 import BeautifulSoup
@@ -76,7 +78,8 @@ def values_texts_options():
     config_values9 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 9. Generar Views para Youtube.                           [In Process]")
     config_values10 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 10. Enviar multimensajes a tus Contactos - WhatsApp v1.  [Inactive]")
     config_values11 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 11. Gif-Imagen para Discord v1.  [Slower]")
-    print('\n\n'+config_values1+'\n'+config_values2+'\n'+config_values3+'\n'+config_values4+'\n'+config_values5+'\n'+config_values6+'\n'+config_values7+'\n'+config_values8+'\n'+config_values9+'\n'+config_values10+'\n'+config_values11)
+    config_values12 = Colorate.Horizontal(Colors.blue_to_cyan, "      > 12. Personalización de presencia de Discord - (Discord RPC)")
+    print('\n\n'+config_values1+'\n'+config_values2+'\n'+config_values3+'\n'+config_values4+'\n'+config_values5+'\n'+config_values6+'\n'+config_values7+'\n'+config_values8+'\n'+config_values9+'\n'+config_values10+'\n'+config_values11+'\n'+config_values12)
 
 #---------------------------------------------------FUNCTIONS--------------------------------------------------------
 
@@ -539,6 +542,58 @@ def generate_automessages_whatsapp(number):
     # 5. In Bucle for other numbers of the WhatsApp.
     pass
 
+#-----------------------------------------------------------------------------------------------------
+def get_current_time(start_time):
+    # Calcula el tiempo transcurrido en segundos desde el inicio
+    elapsed_seconds = time.time() - start_time
+    # Calcula las horas, minutos y segundos restantes
+    remaining_seconds = 99 * 3600 + elapsed_seconds
+    hours = int(remaining_seconds // 3600)
+    minutes = int((remaining_seconds % 3600) // 60)
+    seconds = int(remaining_seconds % 60)
+    # Formatea el tiempo en formato HH:MM:SS como una cadena de texto
+    return "{:02d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+
+# Tiempo actual... 24hours
+start_time = time.time()
+
+
+def discord_rpc_open(id_client,urlImage1,urlImage2,description,buttonsTexts=[]):
+
+    try:
+
+        # Crear una instancia de Presence
+        RPC = Presence(id_client)
+
+        # Conectar al cliente de Discord
+        RPC.connect()
+
+        # Bucle infinito para actualizar continuamente la presencia
+        while True:
+            # Actualizar la presencia con la hora actual en el estado y la imagen de fondo
+            RPC.update(
+                state="Activity elapsed: " + get_current_time(start_time),
+                large_image=urlImage1,
+                small_image=urlImage2,
+                details="Activity Summary:   " + description, 
+                # end=1+1,
+                start=1,
+                # end=10,
+                # pid=114297,
+                # party_id="1jdhg5ks",
+                party_size=[1,1],
+                buttons=buttonsTexts
+                # details=get_current_time(),
+            )
+
+            # Esperar un intervalo de tiempo (en segundos)
+            time.sleep(1)  # Por ejemplo, actualizar cada 1 segundos
+
+    except KeyboardInterrupt:
+        # Cerrar la conexión cuando se presione Ctrl+C
+        RPC.close()
+#-----------------------------------------------------------------------------------------------------
+
 
 #-----------------------------------------------------------------------------------------------------
 def responses_functions():
@@ -598,6 +653,99 @@ def responses_functions():
         generate_automessages_whatsapp()
     elif config_data == 11:
         discord_gifter_change_photo()
+    elif config_data == 12:
+
+        mainTexts_buttons=[]
+
+
+        idClientDiscord_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa el Id-Client de tu Bot Creado: > ")
+        idClientDiscord = str(input(idClientDiscord_prompt))
+
+        imageLarge_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa la primera imagen grande a mostrar: > ")
+        imageLarge = str(input(imageLarge_prompt))
+
+        imageSmall_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa la  imagen pequeña a mostrar: > ")
+        imageSmall = str(input(imageSmall_prompt))
+
+        
+        description_text_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingrese una descripcion pequeña: > ")
+        description_text = str(input(description_text_prompt))
+
+
+        mainTextBtn1_label_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa el texto a mostrar para el boton 1: > ")
+        mainTextBtn1_url1_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa la url a redireccionar para el boton 1: > ")
+        mainTextBtn1_label = str(input(mainTextBtn1_label_prompt))
+        mainTextBtn1_url1 = str(input(mainTextBtn1_url1_prompt))
+
+        buttom_first = {"label": "> " + mainTextBtn1_label, "url": mainTextBtn1_url1}
+        mainTexts_buttons.append(buttom_first)
+
+        mainTextBtn2_label_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa el texto a mostrar para el boton 2: > ")
+        mainTextBtn2_url1_prompt = Colorate.Horizontal(Colors.cyan_to_green, "                            | Ingresa la url a redireccionar para el boton 2: > ")
+        mainTextBtn2_label = str(input(mainTextBtn2_label_prompt))
+        mainTextBtn2_url2 = str(input(mainTextBtn2_url1_prompt))
+        
+        buttom_second = {"label": "> " + mainTextBtn2_label, "url": mainTextBtn2_url2}
+        mainTexts_buttons.append(buttom_second)
+
+        discord_rpc_open(idClientDiscord,imageLarge,imageSmall,description_text,mainTexts_buttons)
+
+        configuration = '''import time
+from pypresence import Presence   
+
+def get_current_time(start_time):
+    # Calcula el tiempo transcurrido en segundos desde el inicio
+    elapsed_seconds = time.time() - start_time
+    # Calcula las horas, minutos y segundos restantes
+    remaining_seconds = 99 * 3600 + elapsed_seconds
+    hours = int(remaining_seconds // 3600)
+    minutes = int((remaining_seconds % 3600) // 60)
+    seconds = int(remaining_seconds % 60)
+    # Formatea el tiempo en formato HH:MM:SS como una cadena de texto
+    return "{{:02d}}:{{:02d}}:{{:02d}}".format(hours, minutes, seconds)
+
+# La actividad de Discord con la configuración del usuario
+def discord_rpc_open(idClientDiscord, imageLarge, imageSmall, description_text, mainTexts_buttons):
+    RPC = Presence(idClientDiscord)
+    RPC.connect()
+
+    start_time = time.time()
+
+    # Bucle infinito para actualizar continuamente la presencia
+    while True:
+        RPC.update(
+            state="Activity elapsed: " + get_current_time(start_time),
+            large_image=imageLarge,
+            small_image=imageSmall,
+            details="Activity Summary:   " + description_text,
+            party_size=[1, 1],
+            buttons=mainTexts_buttons
+        )
+
+time.sleep(1)
+
+idClientDiscord = "{idClientDiscord}"
+imageLarge = "{image_large}"
+imageSmall = "{image_small}"
+description_text = "{description}"
+mainTexts_buttons = {mainTexts_buttons}
+
+discord_rpc_open(idClientDiscord, imageLarge, imageSmall, description_text, mainTexts_buttons)
+    '''.format(idClientDiscord= idClientDiscord, 
+            image_large=imageLarge, 
+            image_small=imageSmall, 
+            description=description_text, 
+            mainTexts_buttons=mainTexts_buttons)
+
+        save_file = int(input("Quieres guardar la configuracion, 1[Si] Otro[No]"))
+
+        if save_file == 1:
+            with open('file_discordRPC.pyw', 'w') as file:
+                file.write(configuration)
+                
+            print("Configuracion Guardad con Exito. Hemos creado un archivo con esa configuracion.")
+        
+
     else:
         invalid_option_text = Colorate.Horizontal(Colors.cyan_to_green, "              [!] Por favor elija una opcion valida.")
         print(invalid_option_text)
